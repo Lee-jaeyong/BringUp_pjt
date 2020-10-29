@@ -3,7 +3,10 @@ $(document).ready(function(e) {
 
 function getAreaDeteil(area){
 	$.ajax({
-		url : "./covid/local/" + area,
+		url : "./covid/local/",
+		data : {
+			area : encodeURIComponent(area)
+		},
 		success : function(res){
 			$("#chart_div").html('<div class="spinner-border text-primary"></div></br></br></br></br></br>');
 			

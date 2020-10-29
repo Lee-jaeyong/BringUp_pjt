@@ -53,7 +53,6 @@ function drawAreaDetailChart() {
 			format : 'decimal'
 		},
 		height : 350,
-		width: $(window).width() < 768 ? 400 : $(window).width() / 1.8,
 		colors : [ '#1b9e77', '#d95f02', '#7570b3','#F361DC' ]
 	};
 	

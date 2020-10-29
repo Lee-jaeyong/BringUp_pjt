@@ -86,7 +86,7 @@ function getFoodData(area){
 	$.ajax({
 		url : "./covid/food",
 		data : {
-			area : area.region_1depth_name
+			area : encodeURIComponent(area.region_1depth_name)
 		},
 		success : function(res) {
 			foodData = res;
@@ -98,7 +98,7 @@ function getFoodData(area){
 				t.row.add([
 					"<a href='https://search.naver.com/search.naver?where=post&sm=tab_jum&query="+encodeURIComponent(data['relax_ADD1'] + " " + data['relax_RSTRNT_NM'])+"' target='_blank'>" + data['relax_RSTRNT_NM'] + "</a>", 
 					"<a href='javascript:move(\""+data['relax_ADD1']+"\","+data['relax_SEQ']+")'>"+ data['relax_ADD1'] + "</a>",
-					data['relax_RSTRNT_TEL'] ? "<a href='tel:" + data['relax_RSTRNT_TEL'] + "'>" + data['relax_RSTRNT_TEL'] + "</a>" : '', data['relax_RSTRNT_REG_DT'] ]);
+					data['relax_RSTRNT_TEL'] ? "<a href='tel:" + data['relax_RSTRNT_TEL'] + "'>" + data['relax_RSTRNT_TEL'] + "</a>" : '']);
 				const nowFood = {
 						relax_ADD1 : data["relax_ADD1"],
 						relax_RSTRNT_NM : data["relax_RSTRNT_NM"],
@@ -107,7 +107,7 @@ function getFoodData(area){
 				search(nowFood);
 			}
 			
-			t.row.add([ '', '', '', '' ]).draw();
+			t.row.add([ '', '', '' ]).draw();
 			$("input[type='search']").val(area.region_1depth_name + " " + area.region_2depth_name);
 			$("input[type='search']").keyup();
 			setTimeout(function(){

@@ -40,7 +40,6 @@
 							<th>상호명</th>
 							<th>주소</th>
 							<th>연락처</th>
-							<th>지정일</th>
 						</tr>
 					</thead>
 					<tbody id="dataTableBody">

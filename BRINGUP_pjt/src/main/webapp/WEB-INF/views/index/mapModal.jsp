@@ -14,7 +14,7 @@
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 			</div>
 			<div class="modal-body" style="text-align: center;">
-				<div id="chart_div"></div>
+				<div id="chart_div" style="display: flex; justify-content: center;"></div>
 				<br/>
 				<div class="container">
 				<div class="form-check-inline">

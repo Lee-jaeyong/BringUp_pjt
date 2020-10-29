@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -109,6 +108,13 @@ public class RestCovid_19Controller {
 
 	@GetMapping("local")
 	public ResponseEntity<Object> covid_19(CovidSearch search, Errors errors) throws Exception {
+		if(search.getArea() != null) {
+			if (!isExistArea(URLDecoder.decode(search.getArea(), "UTF-8"))) {
+				return ResponseEntity.badRequest().body(URLDecoder.decode(search.getArea(), "UTF-8"));
+			}
+			return ResponseEntity.ok(local_covid_19Service.requestByArea(URLDecoder.decode(search.getArea(), "UTF-8")));
+		}
+		
 		covidValidator.validate(search, errors);
 		if (errors.hasErrors()) {
 			return ResponseEntity.badRequest().build();
@@ -120,14 +126,6 @@ public class RestCovid_19Controller {
 		param.put("endCreateDt", dateToString(search.getEnd()));
 		Object result = local_covid_19Service.request(param, APIType.LOCAL);
 		return ResponseEntity.ok(result);
-	}
-
-	@GetMapping("local/{area}")
-	public ResponseEntity<Object> covid_19ByArea(@PathVariable String area) throws Exception {
-		if (!isExistArea(area)) {
-			return ResponseEntity.badRequest().build();
-		}
-		return ResponseEntity.ok(local_covid_19Service.requestByArea(area));
 	}
 
 	private boolean isExistArea(String area) {
