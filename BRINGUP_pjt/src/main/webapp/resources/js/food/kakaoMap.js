@@ -57,8 +57,7 @@ function geolocationFuc() {
 var mapContainer = document.getElementById('kakaoMap'), // 지도를 표시할 div
 mapOption = {
 	center : new kakao.maps.LatLng(37.74618002504751, 127.02386151118968), // 지도의
-	level : 4
-// 지도의 확대 레벨
+	level : 3
 };
 
 // 지도를 생성합니다
@@ -67,7 +66,7 @@ var map = new kakao.maps.Map(mapContainer, mapOption);
 var clusterer = new kakao.maps.MarkerClusterer({
 	map : map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
 	averageCenter : true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
-	minLevel : 10
+	minLevel : 7
 // 클러스터 할 최소 지도 레벨
 });
 
@@ -81,6 +80,7 @@ var geocoder = new kakao.maps.services.Geocoder();
 geolocationFuc();
 
 function getFoodData(area){
+	map.setDraggable(false);
 	$("#mapProgress").css('width',0 + '%');
 	$("#mapProgress").parent().show();
 	$.ajax({
@@ -113,6 +113,7 @@ function getFoodData(area){
 			setTimeout(function(){
 				init = false;
 				$("#mapProgress").parent().hide();
+				map.setDraggable(true);
 			},2000);
 		}
 	})
@@ -132,12 +133,12 @@ kakao.maps.event.addListener(map, 'idle', function() {
 		if (status === kakao.maps.services.Status.OK) {
 			for (var i = 0; i < result.length; i++) {
 				if (result[i].region_type === 'H') {
-					if(searchData.includes(result[i].region_1depth_name + " " + result[i].region_2depth_name)){
+					if(searchData.includes(result[i].region_1depth_name)){
 						$("input[type='search']").val(result[i].region_1depth_name + " " + result[i].region_2depth_name);
 						$("input[type='search']").keyup();
 						return;
 					}
-					searchData.push(result[i].region_1depth_name + " " + result[i].region_2depth_name);
+					searchData.push(result[i].region_1depth_name);
 					getFoodData(result[i]);
 					break;
 				}
@@ -164,7 +165,6 @@ function successSearch(kakao, data, marker, coords) {
 
 function search(data) {
 	geocoder.addressSearch(data['relax_ADD1'], function(result, status) {
-		// 정상적으로 검색이 완료됐으면
 		if (status === kakao.maps.services.Status.OK) {
 			var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
 			var marker = new kakao.maps.Marker({
